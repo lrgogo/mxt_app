@@ -6,7 +6,7 @@ import android.os.Handler;
 
 import com.mxt.mxt.R;
 
-public class StartActivity extends BaseThemeActivity {
+public class StartActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,8 +16,14 @@ public class StartActivity extends BaseThemeActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-               startActivity(new Intent(mActivity, MainActivity.class));
+                startActivity(new Intent(mActivity, MainActivity.class));
+                finish();
             }
         }, 2500);
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
