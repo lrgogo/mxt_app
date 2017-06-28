@@ -9,7 +9,7 @@
     <color name="bg_transparent">@android:color/transparent</color>
     <color name="bg_white">#FFFFFF</color>
     <color name="bg_gray_light">#d0d0d0</color>
-    <color name="bg_status_bar">#f0f0f0</color>
+    <color name="bg_status_bar">#e0e0e0</color>
     <color name="f_black">#2d2d2d</color>
 
 </resources>
