@@ -25,7 +25,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void setStatusBar() {
-        StatusBarUtils.setDarkFont(mActivity);
+        StatusBarUtils.setDarkFont(getWindow());
     }
 
     public TaskManager getTaskManager() {
