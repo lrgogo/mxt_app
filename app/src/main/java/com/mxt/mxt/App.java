@@ -8,6 +8,15 @@ import android.app.Application;
 
 public class App extends Application {
 
+    private static App sContext;
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        sContext = (App) getApplicationContext();
+    }
 
+    public static App getContext() {
+        return sContext;
+    }
 }

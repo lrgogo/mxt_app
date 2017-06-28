@@ -8,10 +8,6 @@
 
     <include
         android:id="@+id/ll_toolbar"
-        layout="@layout/layout_toolbar_title" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        layout="@layout/layout_toolbar_back" />
 
 </LinearLayout>
