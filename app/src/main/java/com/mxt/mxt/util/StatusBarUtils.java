@@ -7,6 +7,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.meizu.flyme.reflect.StatusBarProxy;
+import com.mxt.mxt.R;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -27,21 +28,32 @@ public class StatusBarUtils {
                 option = option | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             }
             decorView.setSystemUiVisibility(option);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setNavigationBarColor(Color.TRANSPARENT);
             window.setStatusBarColor(Color.TRANSPARENT);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         } else {
-            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
     }
 
     public static void setDarkFont(Window window) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return;
+        }
+        boolean result = false;
+        if (Build.MANUFACTURER.equalsIgnoreCase("Xiaomi")) {
+            result = setMiui(window);
+        } else if (Build.MANUFACTURER.equalsIgnoreCase("Meizu")) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            result = setFlyme(window);
+        } else if (Build.MANUFACTURER.equalsIgnoreCase("HUAWEI") && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            result = true;
+        }
+        if (result) {
             return;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -52,15 +64,14 @@ public class StatusBarUtils {
                 option = option | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             }
             decorView.setSystemUiVisibility(option);
-            window.setStatusBarColor(Color.TRANSPARENT);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                window.setStatusBarColor(Color.TRANSPARENT);
+            } else {
+                window.setStatusBarColor(Res.getColor(R.color.bg_status_bar));
+            }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-        if (Build.MANUFACTURER.equalsIgnoreCase("Xiaomi")) {
-            setMiui(window);
-        } else if (Build.MANUFACTURER.equalsIgnoreCase("Meizu")) {
-            setFlyme(window);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
 
