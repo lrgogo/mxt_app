@@ -14,8 +14,7 @@ import com.mxt.mxt.R;
  * Created by Administrator on 2017/6/27.
  */
 
-public class BaseBackActivity extends BaseThemeActivity {
-
+public class BaseBackActivity extends BaseActivity {
 
     private LinearLayout mRootLayout;
     private Toolbar mToolbar;
@@ -34,7 +33,7 @@ public class BaseBackActivity extends BaseThemeActivity {
 
     @Override
     public void setContentView(View view) {
-        mRootLayout = (LinearLayout) findViewById(R.id.root_layout);
+        mRootLayout = (LinearLayout) findViewById(R.id.ll_root);
         mRootLayout.addView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         initToolbar();
     }

@@ -26,26 +26,25 @@ public class StatusBarUtils {
         if (window == null) {
             return;
         }
-        WindowManager.LayoutParams localLayoutParams = activity.getWindow().getAttributes();
+        WindowManager.LayoutParams localLayoutParams = window.getAttributes();
         localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
         boolean result = false;
         if (Build.MANUFACTURER.equalsIgnoreCase("Xiaomi")) {
             result = setMiui(window);
-        }else if (Build.MANUFACTURER.equalsIgnoreCase("Meizu")){
+        } else if (Build.MANUFACTURER.equalsIgnoreCase("Meizu")) {
             result = setFlyme(window);
         }
         if (!result) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 //6.0系统
-                activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             } else {
-                if (Build.MANUFACTURER.equalsIgnoreCase("HUAWEI")){
+                if (Build.MANUFACTURER.equalsIgnoreCase("HUAWEI")) {
                     return;
                 }
                 window.setStatusBarColor(Res.getColor(R.color.bg_gray_light));
             }
         }
-
     }
 
     private static boolean setMiui(Window window) {
