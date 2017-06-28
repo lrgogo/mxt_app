@@ -1,13 +1,13 @@
 package com.mxt.mxt.util;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Build;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.meizu.flyme.reflect.StatusBarProxy;
-import com.mxt.mxt.R;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -26,24 +26,23 @@ public class StatusBarUtils {
         if (window == null) {
             return;
         }
-        WindowManager.LayoutParams localLayoutParams = window.getAttributes();
-        localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
-        boolean result = false;
-        if (Build.MANUFACTURER.equalsIgnoreCase("Xiaomi")) {
-            result = setMiui(window);
-        } else if (Build.MANUFACTURER.equalsIgnoreCase("Meizu")) {
-            result = setFlyme(window);
-        }
-        if (!result) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            View decorView = window.getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                //6.0系统
-                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            } else {
-                if (Build.MANUFACTURER.equalsIgnoreCase("HUAWEI")) {
-                    return;
-                }
-                window.setStatusBarColor(Res.getColor(R.color.bg_gray_light));
+                option = option | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             }
+            decorView.setSystemUiVisibility(option);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+        if (Build.MANUFACTURER.equalsIgnoreCase("Xiaomi")) {
+            setMiui(window);
+        } else if (Build.MANUFACTURER.equalsIgnoreCase("Meizu")) {
+            setFlyme(window);
         }
     }
 
