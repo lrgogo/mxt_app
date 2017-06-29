@@ -19,14 +19,81 @@ import java.lang.reflect.Method;
 
 public class StatusBarUtils {
 
-    public static void setImmerseFullscreen() {
+    public static void setImmerseFullscreen(Window window) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setImmerseFullscreen44(window);
+            return;
+        }
+        setFullscreen(window);
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private static void setImmerseFullscreen44(Window window) {
+        if (Build.MANUFACTURER.equalsIgnoreCase("Xiaomi")) {
+            setMiui(window);
+        } else if (Build.MANUFACTURER.equalsIgnoreCase("Meizu")) {
+            set44Fullscreen(window);
+            setFlyme(window);
+        } else if (Build.MANUFACTURER.equalsIgnoreCase("HUAWEI")) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {//6.0以下
+                set44Fullscreen(window);
+            } else {//6.0以上
+                set60Fullscreen(window);
+            }
+        } else {//其他手机
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //6.0以上
+                set60Fullscreen(window);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0以上
+                set50Fullscreen(window);
+            } else {//4.4以上
+                set44Fullscreen(window);
+            }
+        }
+    }
+
+    private static void setFullscreen(Window window) {
+        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private static void set60Fullscreen(Window window) {
+        View decorView = window.getDecorView();
+        int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        decorView.setSystemUiVisibility(option);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setNavigationBarColor(Color.TRANSPARENT);
+        window.setStatusBarColor(Color.TRANSPARENT);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private static void set50Fullscreen(Window window) {
+        View decorView = window.getDecorView();
+        int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+        decorView.setSystemUiVisibility(option);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setNavigationBarColor(Color.TRANSPARENT);
+        window.setStatusBarColor(Res.getColor(R.color.bg_status_bar));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private static void set44Fullscreen(Window window) {
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
     }
 
     public static void setImmerse(Window window) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setImmerse44(window);
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private static void setImmerse44(Window window) {
         if (Build.MANUFACTURER.equalsIgnoreCase("Xiaomi")) {
             setMiui(window);
         } else if (Build.MANUFACTURER.equalsIgnoreCase("Meizu")) {
@@ -48,7 +115,6 @@ public class StatusBarUtils {
             }
         }
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private static void set60(Window window) {
