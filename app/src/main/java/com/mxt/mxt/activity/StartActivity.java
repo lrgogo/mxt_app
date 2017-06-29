@@ -25,7 +25,7 @@ public class StartActivity extends BaseActivity {
 
     @Override
     public void setStatusBar() {
-        StatusBarUtils.setStartStyle(getWindow());
+        StatusBarUtils.setImmerseFullscreen(getWindow());
     }
 
     @Override
